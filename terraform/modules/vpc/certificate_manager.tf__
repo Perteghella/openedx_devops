@@ -8,13 +8,7 @@
 # Also add certs to us-east-1 for Cloudfront distributions.
 #------------------------------------------------------------------------------
 
-#------------------------------------------------------------------------------
-# SSL/TLS certs issued in the AWS region for ELB
-#------------------------------------------------------------------------------
-provider "aws" {
-  alias  = "environment_region"
-  region = var.aws_region
-}
+
 
 module "acm_root_domain_environment_region" {
   source  = "terraform-aws-modules/acm/aws"

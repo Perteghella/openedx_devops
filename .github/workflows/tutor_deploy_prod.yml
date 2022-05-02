@@ -95,7 +95,7 @@ jobs:
 
       # retrieve the MySQL connection parameters that we created in Terraform
       # and then stored in Kubernetes secrets. These include:
-      #   MYSQL_HOST: mysql.maple.academiacentral.org
+      #   MYSQL_HOST: mysql.mooc.academiacentral.org
       #   MYSQL_PORT: "3306"
       #   OPENEDX_MYSQL_USERNAME: openedx
       #   OPENEDX_MYSQL_PASSWORD: **************
@@ -113,7 +113,7 @@ jobs:
 
       # retrieve the MongoDB connection parameters that we created in Terraform
       # and then stored in Kubernetes secrets. These include:
-      #   MONGODB_HOST: mongodb.maple.academiacentral.org
+      #   MONGODB_HOST: mongodb.mooc.academiacentral.org
       #   MONGODB_PORT: "27017"
       #   MONGODB_PASSWORD: **************
       #   MONGODB_USERNAME: root
@@ -131,7 +131,7 @@ jobs:
       #--------------------------------------------------------------------
 
       # retrieve the Redis connection parameter that we created in Terraform:
-      #   REDIS_HOST: redis.maple.academiacentral.org
+      #   REDIS_HOST: redis.mooc.academiacentral.org
       #
       # see: https://github.com/academiacentral-org/openedx_devops/blob/main/terraform/modules/redis/main.tf
       - name: Redis
@@ -194,7 +194,7 @@ jobs:
       #          OPENEDX_AWS_ACCESS_KEY: ABDCE123456789OHBBGQ
       #          OPENEDX_AWS_SECRET_ACCESS_KEY: A123456789srJ8lgel+ABCDEFGHIJKabcdefghijk
       #          S3_STORAGE_BUCKET: prod-academiacentral-global-storage
-      #          S3_CUSTOM_DOMAIN: cdn.maple.academiacentral.org
+      #          S3_CUSTOM_DOMAIN: cdn.mooc.academiacentral.org
       #          S3_REGION: us-east-1
       #
       # this config depends on a public read-only AWS S3 bucket policy like this:

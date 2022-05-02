@@ -27,11 +27,11 @@ metadata:
 spec:
   tls:
   - hosts:
-    - "maple.academiacentral.org"
-    - "*.maple.academiacentral.org"
+    - "mooc.academiacentral.org"
+    - "*.mooc.academiacentral.org"
     secretName: wild-openedx-prod-tls
   rules:
-  - host: maple.academiacentral.org
+  - host: mooc.academiacentral.org
     http:
       paths:
       - path: /
@@ -41,7 +41,7 @@ spec:
             name: lms
             port:
               number: 8000
-  - host: studio.maple.academiacentral.org
+  - host: studio.mooc.academiacentral.org
     http:
       paths:
       - path: /

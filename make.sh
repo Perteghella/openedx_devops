@@ -24,4 +24,4 @@ cookiecutter --checkout $GITHUB_BRANCH \
              global_root_domain=academiacentral.org \
              global_aws_route53_hosted_zone_id=Z08529743UBBZ58RJDD76 \
              environment_name=prod \
-             environment_subdomain=maple
+             environment_subdomain=mooc

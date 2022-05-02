@@ -1,3 +1,3 @@
-LMS_HOSTNAME=maple.academiacentral.org
-CMS_HOSTNAME=studio.maple.academiacentral.org
+LMS_HOSTNAME=mooc.academiacentral.org
+CMS_HOSTNAME=studio.mooc.academiacentral.org
 DOCKER_IMAGE_OPENEDX=765796256872.dkr.ecr.us-east-1.amazonaws.com/openedx:latest

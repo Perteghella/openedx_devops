@@ -1,2 +1,3 @@
 .terragrunt-cache
+.terragrunt.lock.hcl
 .DS_Store

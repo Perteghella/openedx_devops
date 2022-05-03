@@ -18,14 +18,14 @@ locals {
 
   # AWS infrastructure sizing
   # 2 vCPU 4gb
-  mongodb_instance_class = "db.t3.medium"
+  mongodb_instance_class = "db.t3.2xlarge"
   mongodb_cluster_size   = 1
 
   # 1 vCPU 2gb
-  mysql_instance_class = "db.t2.small"
+  mysql_instance_class = "db.t2.xlarge"
 
   # 1 vCPU 1.55gb
-  redis_node_type = "cache.t2.small"
+  redis_node_type = "cache.t2.medium"
 
   #----------------------------------------------------------------------------
   # AWS Elastic Kubernetes service

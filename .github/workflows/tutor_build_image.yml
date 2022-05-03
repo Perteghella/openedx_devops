@@ -11,7 +11,7 @@
 #        - various Xblocks
 #        Registers the new container in AWS ECR.
 #------------------------------------------------------------------------------
-name: Tutor Build Image
+name: SCAFFOLD - DO NOT USE - BUILD
 
 on: workflow_dispatch
 

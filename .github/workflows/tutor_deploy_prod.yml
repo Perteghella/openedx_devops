@@ -13,7 +13,7 @@
 #        IV.  Merge all of the configuration data into Tutor's Open edX configuration files
 #        V.   Deploy Open edX into the Kubernetes cluster
 #------------------------------------------------------------------------------
-name: Tutor Deploy prod
+name: SCAFFOLD - DO NOT USE - DEPLOY
 
 on: [workflow_dispatch]
 

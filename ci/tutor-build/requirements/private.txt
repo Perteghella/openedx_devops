@@ -15,4 +15,4 @@
 #factory_boy
 #django-debug-toolbar
 
--e ./custom-edx-plugin
+-e ./edx-plugin

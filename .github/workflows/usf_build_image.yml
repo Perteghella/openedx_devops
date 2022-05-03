@@ -71,7 +71,7 @@ jobs:
           repository: academiacentral-org/edx-theme
           path: ${{ env.THEMES_PATH }}/edx-theme
           token: ${{ secrets.PAT }}
-          ref: main
+          ref: open-release/maple.3
 
       - name: Checkout custom edx plugin repo
         uses: actions/checkout@v2

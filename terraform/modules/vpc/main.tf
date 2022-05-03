@@ -12,13 +12,6 @@
 #        There are a LOT of options in this module.
 #        see https://registry.terraform.io/modules/terraform-aws-modules/vpc/aws/latest
 #------------------------------------------------------------------------------
-#------------------------------------------------------------------------------
-# SSL/TLS certs issued in the AWS region for ELB
-#------------------------------------------------------------------------------
-provider "aws" {
-  alias  = "environment_region"
-  region = var.aws_region
-}
 
 
 module "vpc" {

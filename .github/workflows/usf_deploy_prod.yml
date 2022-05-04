@@ -58,7 +58,7 @@ jobs:
 
       # install the kubectl command-line tools which we'll use for making calls to the kubernetes api
       - name: Install kubectl
-        uses: azure/setup-kubectl@v2
+        uses: azure/setup-kubectl@v2.1
         id: install-kubectl
 
       - name: Check environments versions

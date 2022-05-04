@@ -55,8 +55,9 @@ jobs:
       #   - EKS Cluster ARN
       #   - Certificate authority (ie the private ssh key)
       - name: Get Kube config
-        run: aws eks --region us-east-1 update-kubeconfig --name prod-academiacentral-global --alias eks-prod
-        run: cat /home/runner/.kube/config
+        run: |-
+          aws eks --region us-east-1 update-kubeconfig --name prod-academiacentral-global --alias eks-prod
+          cat /home/runner/.kube/config
 
       # install the kubectl command-line tools which we'll use for making calls to the kubernetes api
       - name: Install kubectl

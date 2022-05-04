@@ -10,7 +10,7 @@
 locals {
   platform_name    = "academiacentral"
   platform_region  = "global"
-  root_domain      = "academiacentral.org"
+  root_domain      = "moocweb.com"
   aws_region       = "us-east-1"
   account_id       = "765796256872"
   ec2_ssh_key_name = "uedx"

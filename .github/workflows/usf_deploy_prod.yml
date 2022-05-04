@@ -26,12 +26,12 @@ jobs:
       KUBECONFIG: /home/runner/.kube/config
       ENVIRONMENT_ID: prod
       NAMESPACE: openedx
-      TUTOR_VERSION: v13.1.5
-      OPENEDX_COMMON_VERSION: open-release/maple.2
+      TUTOR_VERSION: v13.2.0
+      OPENEDX_COMMON_VERSION: open-release/maple.3
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v1
+        uses: actions/checkout@v3
 
       #------------------------------------------------------------------------
       # I. Bootstrap the Github Actions Ubuntu instance.

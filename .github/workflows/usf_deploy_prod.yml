@@ -19,11 +19,8 @@ on: [workflow_dispatch]
 
 jobs:
   deploy:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     env:
-      # Fix Note: KUBECONFIG is orphaned and could be removed. we're getting kubeconfig
-      # from AWS EKS via the AWS CLI key/secret.
-      KUBECONFIG: /home/runner/.kube/config
       ENVIRONMENT_ID: prod
       NAMESPACE: openedx
       TUTOR_VERSION: v13.2.0

@@ -53,6 +53,9 @@ jobs:
       #   - Certificate authority (ie the private ssh key)
       - name: Get Kube config
         run: |-
+          echo "kubectl version:"
+          kubectl version
+          echo "aws cli version:"
           aws --version
           aws eks --region us-east-1 update-kubeconfig --name prod-academiacentral-global --alias eks-prod
           #sed 's/v1alpha1/v1beta1/' /home/runner/.kube/config

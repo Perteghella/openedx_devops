@@ -19,7 +19,7 @@ on: [workflow_dispatch]
 
 jobs:
   deploy:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     env:
       ENVIRONMENT_ID: prod
       NAMESPACE: openedx

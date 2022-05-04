@@ -7,7 +7,10 @@
 # usage: Add DNS records and tls certs to environment aws_region for ELB.
 # Also add certs to us-east-1 for Cloudfront distributions.
 #------------------------------------------------------------------------------
-
+provider "aws" {
+  alias  = "environment_region"
+  region = var.aws_region
+}
 
 
 module "acm_root_domain_environment_region" {

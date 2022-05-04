@@ -60,11 +60,9 @@ jobs:
         uses: azure/setup-kubectl@v2.1
         id: install-kubectl
 
+      # dump version information for aws cli and kubectl to the console
       - name: Check environments versions
         run: |-
-          echo "kubeconfig:"
-          cat /home/runner/.kube/config
-          echo
           echo "kubectl version:"
           kubectl version --short
           echo

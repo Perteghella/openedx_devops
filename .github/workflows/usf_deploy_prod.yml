@@ -68,7 +68,7 @@ jobs:
           cat /home/runner/.kube/config
           echo
           echo "kubectl version:"
-          kubectl version
+          kubectl version --short
           echo
           echo "aws cli version:"
           aws --version

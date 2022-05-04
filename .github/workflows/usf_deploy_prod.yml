@@ -54,8 +54,6 @@ jobs:
       - name: Get Kube config
         run: |-
           aws eks --region us-east-1 update-kubeconfig --name prod-academiacentral-global --alias eks-prod
-          #sed 's/v1alpha1/v1beta1/' /home/runner/.kube/config
-          sed -i 's/v1alpha1/v1beta1/g' /home/runner/.kube/config
 
       # install the kubectl command-line tools which we'll use for making calls to the kubernetes api
       - name: Install kubectl

@@ -21,7 +21,7 @@ cookiecutter --checkout $GITHUB_BRANCH \
              global_platform_region=global \
              global_aws_region=us-east-1 \
              global_account_id=765796256872 \
-             global_root_domain=academiacentral.org \
+             global_root_domain=moocweb.com \
              global_aws_route53_hosted_zone_id=Z08529743UBBZ58RJDD76 \
              environment_name=prod \
              environment_subdomain=mooc

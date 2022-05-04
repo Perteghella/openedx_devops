@@ -14,7 +14,7 @@ metadata:
   name: letsencrypt
 spec:
   acme:
-    email: no-reply@academiacentral.org
+    email: no-reply@moocweb.com
     privateKeySecretRef:
       name: letsencrypt
     server: https://acme-v02.api.letsencrypt.org/directory
@@ -34,6 +34,6 @@ spec:
   issuerRef:
     kind: ClusterIssuer
     name: letsencrypt
-  commonName: mooc.academiacentral.org
+  commonName: mooc.moocweb.com
   dnsNames:
-    - "*.mooc.academiacentral.org"
+    - "*.mooc.moocweb.com"

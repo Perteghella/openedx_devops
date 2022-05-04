@@ -64,8 +64,12 @@ jobs:
 
       - name: Check environments versions
         run: |-
+          echo "kubeconfig:"
+          cat /home/runner/.kube/config
+          echo
           echo "kubectl version:"
           kubectl version
+          echo
           echo "aws cli version:"
           aws --version
 

@@ -23,6 +23,7 @@ NAMESPACE="openedx"
 TUTOR_VERSION="v13.2.0"
 OPENEDX_COMMON_VERSION="open-release/maple.3"
 OPENEDX_CUSTOM_THEME="custom-edx-theme"
+TUTOR_ROOT=~/.local/share/tutor
 
 
 # get the Kubernetes kubeconfig for our cluster. This is a prerequisite to getting any other data about or contained within our cluster.
@@ -36,13 +37,15 @@ OPENEDX_CUSTOM_THEME="custom-edx-theme"
 aws eks --region us-east-1 update-kubeconfig --name prod-academiacentral-global --alias eks-prod
 
 # install the latest version of python3 which is a prerequisite for running Tutor
-sudo apt install jq python3 python3-pip libyaml-dev
+sudo apt install jq python3 python3-pip libyaml-dev -y
 pip install --upgrade pyyaml
 
-TUTOR_ROOT=$GITHUB_WORKSPACE/tutor
 
+if [ ! -d ~/openedx_devops ]; then
+    git clone https://github.com/academiacentral-org/openedx_devops.git ~/openedx_devops
+fi
 if [ ! -d ~/tutor ]; then
-    git clone https://github.com/overhangio/tutor.git
+    git clone https://github.com/overhangio/tutor.git ~/tutor
 fi
 
 cd ~/tutor
@@ -59,7 +62,8 @@ TUTOR_VERSION=$(tutor --version | cut -f3 -d' ')
 # then stored in Kubernetes secrets
 # see: https://github.com/academiacentral-org/openedx_devops/blob/main/terraform/modules/kubernetes_secrets/main.tf
 ### Fetch secrets from Kubernetes into Environment
-jwt_private_key=$(kubectl get secret jwt -n $NAMESPACE -o json |  jq  '.data| map_values(@base64d)'  | jq -r 'keys[] as $k | "\(.[$k])"')
+echo "Getting jwt_private_key from Kubernetes Secretes"
+kubectl get secret jwt -n $NAMESPACE -o json |  jq  '.data| map_values(@base64d)'  | jq -r 'keys[] as $k | "\(.[$k])"' > ~/jwt_private_key
 
 # retrieve the MySQL connection parameters that we created in Terraform
 # and then stored in Kubernetes secrets. These include:
@@ -73,6 +77,7 @@ jwt_private_key=$(kubectl get secret jwt -n $NAMESPACE -o json |  jq  '.data| ma
 # Also note that we are using jq to add a prefix of "TUTOR_" to each of the parameter names
 #
 # see: https://github.com/academiacentral-org/openedx_devops/blob/main/terraform/modules/mysql/main.tf
+echo "Getting MySQL remote configuration from Kubernetes Secretes"
 TUTOR_RUN_MYSQL=false
 kubectl get secret mysql-root -n $NAMESPACE  -o json | jq  '.data | map_values(@base64d)' | jq -r 'keys[] as $k | "TUTOR_\($k|ascii_upcase)=\(.[$k])"'
 kubectl get secret mysql-openedx -n $NAMESPACE  -o json | jq  '.data | map_values(@base64d)' | jq -r 'keys[] as $k | "TUTOR_\($k|ascii_upcase)=\(.[$k])"'
@@ -81,6 +86,7 @@ kubectl get secret mysql-openedx -n $NAMESPACE  -o json | jq  '.data | map_value
 #   REDIS_HOST: redis.mooc.moocweb.com
 #
 # see: https://github.com/academiacentral-org/openedx_devops/blob/main/terraform/modules/redis/main.tf
+echo "Getting Redis remote configuration from Kubernetes Secretes"
 TUTOR_RUN_REDIS=false
 kubectl get secret redis -n $NAMESPACE  -o json | jq  '.data | map_values(@base64d)' | jq -r 'keys[] as $k | "TUTOR_\($k|ascii_upcase)=\(.[$k])"'
 
@@ -101,9 +107,11 @@ tutor config save --set EMAIL_BACKEND="django.core.mail.backends.smtp.EmailBacke
                 --set EMAIL_USE_TLS=true
 
 # see: https://github.com/academiacentral-org/openedx_devops/blob/main/terraform/modules/kubernetes_secrets/main.tf
+echo "Getting edX secret key from Kubernetes Secretes"
 kubectl get secret edx-secret-key -n $NAMESPACE  -o json | jq  '.data | map_values(@base64d)' | jq -r 'keys[] as $k | "TUTOR_\($k|ascii_upcase)=\(.[$k])"'
 
 # Pin the instalation ID with the Kubernetes namespace. It needs to be unique and static per instalation.
+echo "Built-in config.yml consists of the following:"
 cat ~/openedx_devops/ci/tutor-deploy/environments/${ENVIRONMENT_ID}/config.yml
 
 # note that values like $LMS_HOSTNAME come from this repo
@@ -120,42 +128,13 @@ TUTOR_RUN_NGINX=false
 # note that the Kubernetes additional config data is locally
 # stored in ~/openedx_devops/ci/tutor-deploy/environments/prod/k8s/
 # in Kubernetes manifest yaml format
-# Create kubernetes ingress and other environment resources
-kubectl apply -f "~/openedx_devops/ci/tutor-deploy/environments/$ENVIRONMENT_ID/k8s"
-
-# Notes: OPENEDX_AWS_ACCESS_KEY, OPENEDX_AWS_SECRET_ACCESS_KEY and S3_STORAGE_BUCKET
-#        are stored in EKS kubernetes secrets, viewable from k9s.
-#        example values:
-#          OPENEDX_AWS_ACCESS_KEY: ABDCE123456789OHBBGQ
-#          OPENEDX_AWS_SECRET_ACCESS_KEY: A123456789srJ8lgel+ABCDEFGHIJKabcdefghijk
-#          S3_STORAGE_BUCKET: prod-academiacentral-global-storage
-#          S3_CUSTOM_DOMAIN: cdn.mooc.moocweb.com
-#          S3_REGION: us-east-1
-#
-# this config depends on a public read-only AWS S3 bucket policy like this:
-# https://github.com/academiacentral-org/terraform-openedx/blob/main/components/s3/main.tf#L19
-#
-#      {
-#          "Version": "2012-10-17",
-#          "Statement": [
-#              {
-#                  "Sid": "",
-#                  "Effect": "Allow",
-#                  "Principal": "*",
-#                  "Action": [
-#                      "s3:GetObject*",
-#                      "s3:List*"
-#                  ],
-#                  "Resource": "arn:aws:s3:::prod-academiacentral-global-storage/*"
-#              }
-#          ]
-#      }
-#
-kubectl get secret s3-openedx-storage -n $NAMESPACE  -o json | jq  '.data | map_values(@base64d)' | jq -r 'keys[] as $k | "TUTOR_\($k|ascii_upcase)=\(.[$k])"'
+echo "Create kubernetes ingress and other environment resources"
+kubectl apply -f "/home/ubuntu/openedx_devops/ci/tutor-deploy/environments/$ENVIRONMENT_ID/k8s/"
 
 pip install git+https://github.com/hastexo/tutor-contrib-s3@v0.2.0
 tutor plugins enable s3
 
+$(kubectl get secret s3-openedx-storage -n $NAMESPACE  -o json | jq  '.data | map_values(@base64d)' | jq -r 'keys[] as $k | "export \($k|ascii_upcase)=\(.[$k])"' )
 tutor config save --set OPENEDX_AWS_ACCESS_KEY="$OPENEDX_AWS_ACCESS_KEY" \
                 --set OPENEDX_AWS_SECRET_ACCESS_KEY="$OPENEDX_AWS_SECRET_ACCESS_KEY" \
                 --set OPENEDX_AWS_QUERYSTRING_AUTH="False" \
@@ -167,10 +146,11 @@ tutor config save --set OPENEDX_AWS_ACCESS_KEY="$OPENEDX_AWS_ACCESS_KEY" \
 #tutor config save --set OPENEDX_FACEBOOK_APP_ID="${{ secrets.FACEBOOK_APP_ID }}" \
 #                --set OPENEDX_FACEBOOK_APP_SECRET="${{ secrets.FACEBOOK_APP_SECRET }}"
 
-export TUTOR_JWT_RSA_PRIVATE_KEY=\'$(sed -E 's/$/\n/g' ./jwt_private_key)\'
+export TUTOR_JWT_RSA_PRIVATE_KEY=\'$(sed -E 's/$/\n/g' ~/jwt_private_key)\'
 tutor --version
 tutor config save
-cat $TUTOR_ROOT/config.yml
+echo "config.yml:"
+cat $(tutor config printroot)/config.yml
 
 #------------------------------------------------------------------------
 # IV. Merge all of the configuration data into Tutor's Open edX
@@ -185,10 +165,10 @@ echo "config.yml full path: $(tutor config printroot)/config.yml"
 cd $TUTOR_ROOT/env/apps/openedx/config/
 
 mv lms.env.json lms.env.json.orig
-jq -s '.[0] * .[1]'  lms.env.json.orig  "~/openedx_devops/ci/tutor-deploy/environments/$ENVIRONMENT_ID/settings_merge.json" >  lms.env.json
+jq -s '.[0] * .[1]'  lms.env.json.orig  "/home/ubuntu/openedx_devops/ci/tutor-deploy/environments/$ENVIRONMENT_ID/settings_merge.json" >  lms.env.json
 
 mv cms.env.json cms.env.json.orig
-jq -s '.[0] * .[1]'  cms.env.json.orig  "~/openedx_devops/ci/tutor-deploy/environments/$ENVIRONMENT_ID/settings_merge.json" >  cms.env.json
+jq -s '.[0] * .[1]'  cms.env.json.orig  "/home/ubuntu/openedx_devops/ci/tutor-deploy/environments/$ENVIRONMENT_ID/settings_merge.json" >  cms.env.json
 rm *orig
 
 #------------------------------------------------------------------------
